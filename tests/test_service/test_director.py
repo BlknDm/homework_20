@@ -1,26 +1,7 @@
-from unittest.mock import MagicMock
 import pytest
 
-from dao.model.director import Director
-from dao.director import DirectorDAO
 from service.director import DirectorService
-from setup_db import db
 
-
-@pytest.fixture()
-def director_dao():
-    director_dao = DirectorDAO(db.session)
-
-    mike = Director(id=1, name='mike')
-    poly = Director(id=2, name='poly')
-    sam = Director(id=3, name='sam')
-
-    director_dao.get_one = MagicMock(return_value=mike)
-    director_dao.get_all = MagicMock(return_value=[mike, poly, sam])
-    director_dao.create = MagicMock(return_value=Director(id=3))
-    director_dao.update = MagicMock()
-    director_dao.delete = MagicMock()
-    return director_dao
 
 class TestDirectorService:
     @pytest.fixture(autouse=True)
@@ -29,8 +10,8 @@ class TestDirectorService:
 
     def test_get_one(self):
         director = self.director_service.get_one(1)
-        assert director != None
-        assert director.id != None
+        assert director is not None
+        assert director.id is not None
 
     def test_get_all(self):
         directors = self.director_service.get_all()
@@ -41,7 +22,7 @@ class TestDirectorService:
             "name": "Sully",
         }
         director = self.director_service.create(director_d)
-        assert director.id != None
+        assert director.id is not None
 
     def test_delete(self):
         self.director_service.delete(1)
